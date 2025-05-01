@@ -1,13 +1,19 @@
 import { useState } from 'react';
-import { 
-  Dialog, 
-  DialogTitle, 
-  DialogContent, 
-  List, 
-  ListItem, 
-  ListItemIcon, 
-  ListItemText, 
+import {
+  AppBar,
+  Toolbar,
+  Typography,
   IconButton,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  useMediaQuery,
+  useTheme,
+  Box,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
@@ -17,51 +23,42 @@ import Link from 'next/link';
 
 export const MenuDialog = () => {
   const [open, setOpen] = useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const menuItems = [
-    { 
-      text: 'Trang chủ', 
-      icon: <HomeIcon />, 
-      href: '/' 
-    },
-    { 
-      text: 'Tính chi tiêu nhóm', 
-      icon: <CalculateIcon />, 
-      href: '/expense' 
-    },
-    { 
-      text: 'Địa điểm du lịch', 
-      icon: <TravelExploreIcon />, 
-      href: '/travel' 
-    }
+    { text: 'Trang chủ', icon: <HomeIcon />, href: '/' },
+    { text: 'Tính chi tiêu nhóm', icon: <CalculateIcon />, href: '/expense' },
+    { text: 'Địa điểm du lịch', icon: <TravelExploreIcon />, href: '/travel' },
   ];
 
   return (
     <>
-      <IconButton
-        edge="start"
-        color="inherit"
-        aria-label="menu"
-        onClick={handleClickOpen}
-        sx={{ position: 'fixed', top: 16, left: 16, zIndex: 1000 }}
-      >
-        <MenuIcon />
-      </IconButton>
+      {/* Header riêng cố định */}
+      <AppBar position="fixed" sx={{ bgcolor: '#121212' }}>
+        <Toolbar>
+          <IconButton edge="start" color="inherit" onClick={handleClickOpen}>
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" sx={{ ml: 2 }}>
+            Neit
+          </Typography>
+        </Toolbar>
+      </AppBar>
 
-      <Dialog 
-        open={open} 
+      {/* Spacer để tránh che chữ */}
+      <Toolbar />
+
+      <Dialog
+        fullScreen={fullScreen}
+        open={open}
         onClose={handleClose}
         PaperProps={{
           sx: {
-            minWidth: 300,
+            minWidth: fullScreen ? '100%' : 300,
             bgcolor: 'background.paper'
           }
         }}
@@ -70,7 +67,7 @@ export const MenuDialog = () => {
         <DialogContent>
           <List>
             {menuItems.map((item) => (
-              <ListItem 
+              <ListItem
                 key={item.text}
                 component={Link}
                 href={item.href}
@@ -79,12 +76,10 @@ export const MenuDialog = () => {
                   '&:hover': {
                     backgroundColor: 'action.hover',
                   },
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
-                <ListItemIcon>
-                  {item.icon}
-                </ListItemIcon>
+                <ListItemIcon>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.text} />
               </ListItem>
             ))}
@@ -93,4 +88,4 @@ export const MenuDialog = () => {
       </Dialog>
     </>
   );
-}; 
+};
