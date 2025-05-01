@@ -29,11 +29,11 @@ export default function ExpensePage() {
   useEffect(() => {
     const savedMembers = localStorage.getItem('expenseMembers');
     const savedExpenses = localStorage.getItem('expenseList');
-    
+
     if (savedMembers) {
       setMembers(JSON.parse(savedMembers));
     }
-    
+
     if (savedExpenses) {
       const parsedExpenses = JSON.parse(savedExpenses);
       setExpenses(parsedExpenses);
@@ -72,7 +72,7 @@ export default function ExpensePage() {
     // Tính tổng chi tiêu của mỗi người
     const memberExpenses = new Map<string, number>();
     currentMembers.forEach(member => memberExpenses.set(member, 0));
-    
+
     currentExpenses.forEach(expense => {
       const current = memberExpenses.get(expense.payer) || 0;
       memberExpenses.set(expense.payer, current + expense.amount);
@@ -94,11 +94,11 @@ export default function ExpensePage() {
 
     // Tìm người cần trả và người cần nhận
     const debtors = Array.from(balances.entries())
-      .filter(([_, balance]) => balance < 0)
+      .filter(([, balance]) => balance < 0)
       .sort((a, b) => a[1] - b[1]);
 
     const creditors = Array.from(balances.entries())
-      .filter(([_, balance]) => balance > 0)
+      .filter(([, balance]) => balance > 0)
       .sort((a, b) => b[1] - a[1]);
 
     // Tính toán các khoản thanh toán
@@ -135,9 +135,9 @@ export default function ExpensePage() {
         <Typography variant="h4" component="h1" gutterBottom>
           Tính chi tiêu nhóm
         </Typography>
-        
+
         <AddMember onAddMember={handleAddMember} />
-        
+
         {members.length > 0 && (
           <>
             <AddExpense members={members} onAddExpense={handleAddExpense} />
